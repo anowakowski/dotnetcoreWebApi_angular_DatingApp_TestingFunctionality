@@ -49,9 +49,6 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login(UserForLoginDto userForLogin)
         {
-
-            throw new Exception("comp says no!");
-
             var userFromRepo = await authRepository.Login(userForLogin.Username.ToLower(), userForLogin.Password);
 
             if (userFromRepo == null)
