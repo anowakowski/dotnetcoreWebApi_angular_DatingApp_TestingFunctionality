@@ -13,21 +13,20 @@ namespace DatingApp.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IDatingRepository datingRepository;
-        private readonly IMapper mapper;
-
-        public UsersController(IDatingRepository datingRepository, IMapper mapper)
+        private readonly IDatingRepository _repo;
+        private readonly IMapper _mapper;
+        public UsersController(IDatingRepository repo, IMapper mapper)
         {
-            this.datingRepository = datingRepository;
-            this.mapper = mapper;
+            _mapper = mapper;
+            _repo = repo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await datingRepository.GetUsers();
+            var users = await _repo.GetUsers();
 
-            var usersToReturn = mapper.Map<IEnumerable<UserForListDto>>(users);
+            var usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
 
             return Ok(usersToReturn);
         }
@@ -35,11 +34,11 @@ namespace DatingApp.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = datingRepository.GetUser(id);
+            var user = await _repo.GetUser(id);
 
-            var UserToReturn = mapper.Map<UserForDetailDto>(user);
+            var userToReturn = _mapper.Map<UserForDetailedDto>(user);
 
-            return Ok(UserToReturn);
+            return Ok(userToReturn);
         }
     }
 }
