@@ -11,12 +11,12 @@ import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gal
   styleUrls: ['./member-detail.component.scss']
 })
 export class MemberDetailComponent implements OnInit {
-
-  constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
-[]   user: User;
+  user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
-any;
+
+  constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
+
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.user = data['user'];
