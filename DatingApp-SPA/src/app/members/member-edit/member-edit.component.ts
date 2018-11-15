@@ -3,6 +3,8 @@ import { User } from 'src/app/_models/user';
 import { ActivatedRoute } from '@angular/router';
 import { AlertifyService } from 'src/app/services/alertify.service';
 import { NgForm } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-member-edit',
@@ -10,8 +12,12 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./member-edit.component.scss']
 })
 export class MemberEditComponent implements OnInit {
-
-  constructor(private route: ActivatedRoute, private alertify: AlertifyService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private alertify: AlertifyService,
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
   @ViewChild('editForm') editForm: NgForm;
   user: User;
   @HostListener('window:beforeunload', ['$event'])
@@ -28,8 +34,11 @@ export class MemberEditComponent implements OnInit {
   }
 
   updataUser() {
-    console.log(this.user);
-    this.alertify.success('Profile updated successfuly');
-    this.editForm.reset(this.user);
+    this.userService.upadteUser(this.authService.decodedToken.nameid, this.user).subscribe(next => {
+      this.alertify.success('Profile updated successfuly');
+      this.editForm.reset(this.user);
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 }
