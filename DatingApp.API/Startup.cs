@@ -57,6 +57,8 @@ namespace DatingApp.API
                     };
                 });
 
+            services.Configure<CoudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
 
         }
 
