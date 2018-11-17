@@ -57,6 +57,8 @@ namespace DatingApp.API
                     };
                 });
 
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
 
         }
 
@@ -84,7 +86,7 @@ namespace DatingApp.API
             }
 
             // app.UseHttpsRedirection();
-            // seeder.SeedUsers();
+            //seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();
