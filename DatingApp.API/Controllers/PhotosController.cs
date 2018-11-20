@@ -123,7 +123,7 @@ namespace DatingApp.API.Controllers
                 return BadRequest("This is already the main photo");
             }
 
-            var currentMainPhoto = await datingRepository.GetMainPhotoForUser(userId);
+            var currentMainPhoto = await datingRepository.GetMainPhoto(userId);
             currentMainPhoto.IsMain = false;
             photoFromRepo.IsMain = true;
 
@@ -133,6 +133,14 @@ namespace DatingApp.API.Controllers
             }
 
             return BadRequest("could not set photo to main");
+        }
+
+        [HttpGet("allPhoto")]
+        public async Task<IActionResult> GetAllUserPhoto(int userId)
+        {
+            var photos = await datingRepository.GetMainPhoto(userId);
+
+            return Ok(photos);
         }
     }
 }

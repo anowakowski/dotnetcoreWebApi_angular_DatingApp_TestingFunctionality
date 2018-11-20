@@ -62,7 +62,11 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   setMainPhoto(photo: Photo) {
-
+    this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
+      console.log('successfully set main photo');
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
   deletePhoto(id: number) {

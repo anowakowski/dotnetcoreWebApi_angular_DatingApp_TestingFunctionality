@@ -26,7 +26,11 @@ namespace DatingApp.API.Data
 
         public async Task<Photo> GetMainPhotoForUser(int userId)
         {
-            return await dataContext.Photos.Where(u => u.Id == userId).FirstOrDefaultAsync(p => p.IsMain);
+            var mainPhoto = await dataContext.Photos.Where(u => u.Id == userId).ToListAsync();;
+            
+            //.FirstOrDefaultAsync(p => p.IsMain);
+            
+            return mainPhoto.FirstOrDefault(x => x.IsMain == true);
         }
 
         public async Task<Photo> GetPhoto(int id)
@@ -53,6 +57,12 @@ namespace DatingApp.API.Data
         public async Task<bool> SaveAll()
         {
             return await dataContext.SaveChangesAsync() > 0;
+        }
+ 
+        public async Task<Photo> GetMainPhoto(int id)
+        {
+            return await dataContext.Photos.Where(x => x.UserId == id).FirstOrDefaultAsync(x => x.IsMain);
+
         }
     }
 }
