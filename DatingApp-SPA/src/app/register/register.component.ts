@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { AlertifyService } from '../services/alertify.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-register',
@@ -15,15 +16,17 @@ export class RegisterComponent implements OnInit {
   model: any = {};
   registerForm: FormGroup;
 
-  constructor(private authService: AuthService, private alertifyService: AlertifyService) { }
+  constructor(
+    private authService: AuthService,
+    private alertifyService: AlertifyService,
+    private fb: FormBuilder) { }
+    bsConfig: Partial<BsDatepickerConfig>;
 
   ngOnInit() {
-    this.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('',
-        [Validators.required, Validators.minLength(4), Validators.maxLength(8)]),
-      confirmPassword: new FormControl('', Validators.required)
-    }, this.passwordMatchValidator);
+    this.bsConfig = {
+      containerClass: 'theme-red'
+    };
+    this.createRegisterForm();
   }
 
   passwordMatchValidator(g: FormGroup) {
@@ -38,6 +41,19 @@ export class RegisterComponent implements OnInit {
     // });
 
     console.log(this.registerForm.value);
+  }
+
+  createRegisterForm() {
+    this.registerForm = this.fb.group({
+      gender: ['male'],
+      username: ['', Validators.required],
+      knownAs: ['', Validators.required],
+      dateOfBirth: [null, Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
+      confirmPassword: ['', Validators.required]
+    }, {validator: this.passwordMatchValidator});
   }
 
   cancel() {
