@@ -13,8 +13,11 @@ import { Pagination, PaginationResult } from 'src/app/_models/Pagination';
 export class MemberListComponent implements OnInit {
   users: User[];
   pagination: Pagination;
+  user: User = JSON.parse(localStorage.getItem('user'));
+  genderList = [{value: 'male', dispaly: 'Males'}, {value: 'female', dispaly: 'Females'}];
+  userParams: any = {};
 
-  constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -22,6 +25,9 @@ export class MemberListComponent implements OnInit {
       this.pagination = data['users'].pagination;
     });
 
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 99;
   }
 
   pageChanged(event: any): void {
@@ -29,9 +35,16 @@ export class MemberListComponent implements OnInit {
     this.loadUsers();
   }
 
+  resetFilters() {
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 99;
+    this.loadUsers();
+  }
+
   loadUsers() {
     this.userService
-      .getUsers(this.pagination.currentPage, this.pagination.itemsPerPage)
+      .getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
       .subscribe(
         (res: PaginationResult<User[]>) => {
           this.users = res.result;
@@ -42,4 +55,8 @@ export class MemberListComponent implements OnInit {
         }
       );
   }
+
+
+
+
 }
